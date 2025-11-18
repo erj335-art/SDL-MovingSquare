@@ -64,6 +64,7 @@ int main(void)
             }
         }
 
+        
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); // background (black)
         SDL_RenderClear(renderer);
 
@@ -83,9 +84,7 @@ int main(void)
         // --- RED SQUARE ---
         SDL_FRect rect = { 375, 500, 50, 50};
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        if (!SDL_RenderFillRect(renderer, &rect)) {
-            SDL_Log("SDL_RenderFillRect error: %s", SDL_GetError());
-        }
+        SDL_RenderFillRect(renderer, &rect);
 
         SDL_RenderPresent(renderer);
 
