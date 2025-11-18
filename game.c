@@ -5,6 +5,9 @@
 #define APP_WIDTH  800
 #define APP_HEIGHT 600
 
+#define CUBE_HIGHT 50
+#define CUBE_WIDTH 50
+
 static SDL_Window   *window   = NULL;
 static SDL_Renderer *renderer = NULL;
 
@@ -46,9 +49,48 @@ int main(void)
     int running = 1;
     const Uint32 FRAME_MS = 16; // ~60 FPS
 
+    int x = 0;
+    int y = 0;
+
+
+    int velocity_x = 1;
+    int velocity_y = 1;
+
+
     while (running)
     {
         Uint32 frame_start = SDL_GetTicks();
+
+        x = x + velocity_x;
+        y = y + velocity_y;
+
+        //x
+        if (x + CUBE_HIGHT > APP_WIDTH || x < 0){
+            velocity_x = -velocity_x; 
+        }
+        if (velocity_x > 0){
+            velocity_x ++;
+        }
+            else {
+                velocity_x--;
+                counter++;
+            }
+
+
+            //y
+        if (y + CUBE_WIDTH > APP_HEIGHT || y < 0){
+            velocity_y = -velocity_y;
+        }
+            if (velocity_y > 0)
+            {
+                velocity_y++;
+            }
+            else{
+            velocity_y--;
+            counter++;
+        }
+            
+        
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -64,7 +106,7 @@ int main(void)
         }
 
         
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); // background (black)
+        SDL_SetRenderDrawColor(renderer, 0, 0, 255, SDL_ALPHA_OPAQUE); // background (black)
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // text color (white)
@@ -78,11 +120,14 @@ int main(void)
             SDL_GetTicks() / 1000
         );
 
+        SDL_RenderDebugTextFormat(renderer, 200, 200, "Velocity X = %d ||| Velocity Y = %d", velocity_x, velocity_y);
+
         SDL_RenderDebugTextFormat(renderer, 100, 100, "Counter: %d", counter);
 
         // --- RED SQUARE ---
-        SDL_FRect rect = { 375, 500, 50, 50};
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_FRect rect = { x, y, CUBE_HIGHT, CUBE_WIDTH};
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderFillRect(renderer, &rect);
 
         SDL_RenderPresent(renderer);
